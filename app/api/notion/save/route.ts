@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       targetPageId,
       log.situation,
       log.prayerType,
-      { prayers: log.prayers as any, scriptures: log.scriptures as any }
+      { categories: log.categories as any, scriptures: log.scriptures as any }
     );
 
     await prisma.prayerLog.update({ where: { id: logId }, data: { notionPageId } });

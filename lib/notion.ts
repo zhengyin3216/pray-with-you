@@ -62,19 +62,28 @@ export async function saveToNotion(
       {
         object: "block", type: "heading_3",
         heading_3: {
-          rich_text: [{ type: "text", text: { content: "구체적으로 구하는 것" }, annotations: FULL_ANN }],
+          rich_text: [{ type: "text", text: { content: "함께 드리는 기도" }, annotations: FULL_ANN }],
         },
       },
-      ...result.prayers.map((prayer) => ({
-        object: "block" as const,
-        type: "bulleted_list_item" as const,
-        bulleted_list_item: {
-          rich_text: [
-            { type: "text" as const, text: { content: `${prayer.title}: ` }, annotations: BOLD_ANN },
-            { type: "text" as const, text: { content: prayer.content }, annotations: FULL_ANN },
-          ],
+      ...result.categories.flatMap((cat) => [
+        {
+          object: "block" as const,
+          type: "heading_3" as const,
+          heading_3: {
+            rich_text: [{ type: "text" as const, text: { content: `함께 드리는 기도 · ${cat.name}` }, annotations: FULL_ANN }],
+          },
         },
-      })),
+        ...cat.prayers.map((prayer) => ({
+          object: "block" as const,
+          type: "bulleted_list_item" as const,
+          bulleted_list_item: {
+            rich_text: [
+              { type: "text" as const, text: { content: `${prayer.title}: ` }, annotations: BOLD_ANN },
+              { type: "text" as const, text: { content: prayer.content }, annotations: FULL_ANN },
+            ],
+          },
+        })),
+      ]),
       {
         object: "block", type: "paragraph",
         paragraph: { rich_text: [] },

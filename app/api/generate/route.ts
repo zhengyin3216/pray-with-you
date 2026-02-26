@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         userId: (session.user as any).id,
         situation,
         prayerType: prayerType || "간구",
-        prayers: result.prayers,
+        categories: result.categories,
         scriptures: result.scriptures,
       },
     });

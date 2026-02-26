@@ -31,7 +31,7 @@ export default function Home() {
       <div className="text-center mb-12 animate-in">
         <div className="text-6xl mb-5">🙏</div>
         <h1 className="text-4xl font-bold mb-3" style={{ color: "var(--gold)" }}>
-          기도노트
+          함께기도해
         </h1>
         <p className="text-lg" style={{ color: "var(--muted)" }}>
           막막한 기도를, 구체적인 간구로

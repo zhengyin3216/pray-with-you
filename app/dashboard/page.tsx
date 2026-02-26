@@ -5,8 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const PRAYER_TYPES = ["간구", "감사", "회개", "중보"] as const;
 
-interface PrayerResult {
+interface PrayerCategory {
+  name: string;
   prayers: { title: string; content: string }[];
+}
+interface PrayerResult {
+  categories: PrayerCategory[];
   scriptures: { reference: string; text: string; reason: string }[];
 }
 interface NotionPage { id: string; title: string; }
@@ -109,7 +113,7 @@ function DashboardContent() {
         style={{ borderColor: "var(--border)", background: "var(--deep)" }}>
         <div className="flex items-center gap-3">
           <span className="text-2xl">🙏</span>
-          <span className="font-bold text-xl" style={{ color: "var(--gold)" }}>기도노트</span>
+          <span className="font-bold text-xl" style={{ color: "var(--gold)" }}>함께기도해</span>
         </div>
         <div className="flex items-center gap-4">
           {!notionConnected ? (
@@ -188,14 +192,23 @@ function DashboardContent() {
                 style={{ background: "var(--deep)", color: "var(--muted)" }}>
                 현재 상황: {situation}
               </div>
-              <div className="space-y-3">
-                {result.prayers.map((prayer, i) => (
-                  <div key={i} className="p-4 rounded-lg border-l-2"
-                    style={{ background: "var(--deep)", borderColor: "var(--gold)" }}>
-                    <div className="font-semibold text-sm mb-1" style={{ color: "var(--gold)" }}>
-                      {prayer.title}
+              <div className="space-y-5">
+                {result.categories?.map((cat, ci) => (
+                  <div key={ci}>
+                    <div className="text-xs font-semibold mb-2" style={{ color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      함께 드리는 기도 · {cat.name}
                     </div>
-                    <div className="text-sm leading-relaxed">{prayer.content}</div>
+                    <div className="space-y-2">
+                      {cat.prayers.map((prayer, pi) => (
+                        <div key={pi} className="p-4 rounded-lg border-l-2"
+                          style={{ background: "var(--deep)", borderColor: "var(--gold)" }}>
+                          <div className="font-semibold text-sm mb-1" style={{ color: "var(--gold)" }}>
+                            {prayer.title}
+                          </div>
+                          <div className="text-sm leading-relaxed">{prayer.content}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
