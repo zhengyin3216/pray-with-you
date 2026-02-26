@@ -1,4 +1,3 @@
-// lib/auth.ts
 import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
@@ -11,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     error: "/",
   },
   providers: [
-    // ── 카카오 ──────────────────────────────────────────
+    // 카카오
     {
       id: "kakao",
       name: "Kakao",
@@ -24,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       userinfo: "https://kapi.kakao.com/v2/user/me",
       clientId: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
-      profile(profile) {
+      profile(profile: any) {
         return {
           id: String(profile.id),
           name: profile.kakao_account?.profile?.nickname,
@@ -33,7 +32,7 @@ export const authOptions: NextAuthOptions = {
         };
       },
     },
-    // ── 네이버 ──────────────────────────────────────────
+    // 네이버
     {
       id: "naver",
       name: "Naver",
@@ -43,7 +42,7 @@ export const authOptions: NextAuthOptions = {
       userinfo: "https://openapi.naver.com/v1/nid/me",
       clientId: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET,
-      profile(profile) {
+      profile(profile: any) {
         return {
           id: profile.response.id,
           name: profile.response.name,
