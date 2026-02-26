@@ -23,8 +23,8 @@ export async function POST(req: Request) {
         userId: (session.user as any).id,
         situation,
         prayerType: prayerType || "간구",
-        categories: result.categories,
-        scriptures: result.scriptures,
+        categories: result.categories as any,
+        scriptures: result.scriptures as any,
       },
     });
 
