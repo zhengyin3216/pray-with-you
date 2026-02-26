@@ -21,8 +21,8 @@ export const authOptions: NextAuthOptions = {
       },
       token: "https://kauth.kakao.com/oauth/token",
       userinfo: "https://kapi.kakao.com/v2/user/me",
-      clientId: process.env.KAKAO_CLIENT_ID,
-      clientSecret: process.env.KAKAO_CLIENT_SECRET,
+      clientId: "7d9e806592174d3d3e93aa86abc07dcb", #process.env.KAKAO_CLIENT_ID,
+      clientSecret: "wiO1huSuXSOEFgSV9oUD9rfefwkK75v1", #process.env.KAKAO_CLIENT_SECRET,
       profile(profile: any) {
         return {
           id: String(profile.id),
