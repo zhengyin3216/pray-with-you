@@ -8,16 +8,42 @@ generator client {
 }
 
 model User {
-  id           String      @id @default(cuid())
-  email        String?     @unique
-  name         String?
-  image        String?
-  notionToken  String?
-  notionPageId String?
-  createdAt    DateTime    @default(now())
-  prayerLogs   PrayerLog[]
-  accounts     Account[]
-  sessions     Session[]
+  id               String    @id @default(cuid())
+  email            String?   @unique
+  name             String?
+  image            String?
+  notionToken      String?
+  notionPageId     String?
+  createdAt        DateTime  @default(now())
+
+  // ✅ 구독 관련 필드 추가
+  subscriptionStatus String  @default("free")   // "free" | "premium" | "cancelled"
+  subscriptionEnd  DateTime?
+  billingKey       String?   // 토스페이먼츠 자동결제 빌링키
+  monthlyUsage     Int       @default(0)         // 이번 달 기도 생성 횟수
+  usageResetDate   DateTime  @default(now())     // 사용량 초기화 기준일
+
+  prayerLogs       PrayerLog[]
+  subscriptions    Subscription[]
+  accounts         Account[]
+  sessions         Session[]
+}
+
+// ✅ 구독 결제 내역 모델
+model Subscription {
+  id               String   @id @default(cuid())
+  userId           String
+  plan             String   @default("premium")  // "premium"
+  status           String   // "active" | "cancelled" | "expired"
+  amount           Int      @default(9900)        // 원 단위
+  startDate        DateTime @default(now())
+  endDate          DateTime
+  tossOrderId      String?  @unique
+  tossPaymentKey   String?
+  billingKey       String?
+  createdAt        DateTime @default(now())
+
+  user             User     @relation(fields: [userId], references: [id])
 }
 
 model PrayerLog {
@@ -29,6 +55,7 @@ model PrayerLog {
   scriptures   Json
   notionPageId String?
   createdAt    DateTime @default(now())
+
   user         User     @relation(fields: [userId], references: [id])
 }
 
@@ -45,7 +72,8 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -55,7 +83,8 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
